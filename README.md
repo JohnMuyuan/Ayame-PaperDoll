@@ -67,6 +67,8 @@
 
 ## 安装
 
+从 [**Releases**](https://github.com/JohnMuyuan/Ayame-PaperDoll/releases/latest) 下载对应加载器的 jar，放入 `mods` 文件夹：
+
 - **Minecraft**：26.1
 - **Fabric**：Fabric Loader ≥ 0.18.5 + Fabric API ≥ 0.144.3+26.1（可选装 Mod Menu 以便打开配置界面）
 - **NeoForge**：≥ 26.1.0.7-beta
