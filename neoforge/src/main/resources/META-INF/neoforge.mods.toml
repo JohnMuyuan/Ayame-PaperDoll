@@ -1,0 +1,42 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "${mod_issues_url}"
+license = "${mod_license}"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+displayURL = "${mod_homepage_url}"
+authors = '''
+LucunJi (original author of Extra Player Renderer)
+HappyRespawnanchor (upstream Ayame PaperDoll)
+JohnMuyuan (this fork)
+'''
+credits = '''
+Fallen_Breath
+X-Green
+altrisi
+plusls
+pertaz
+LightgraycaAT
+'''
+description = '''${mod_description}'''
+logoFile = "icon.png"
+logoBlur = false
+[[dependencies.${ mod_id }]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.${ mod_id }]]
+modId = "minecraft"
+type = "required"
+versionRange = "${neoforge_minecraft_version_range}"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "${mod_mixin_config}"

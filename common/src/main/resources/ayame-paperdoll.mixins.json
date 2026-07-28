@@ -1,0 +1,25 @@
+{
+    "required": true,
+    "package": "org.ayamemc.ayamepaperdoll.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "minVersion": "0.8",
+    "client": [
+        "hud.AvatarRendererMixin",
+        "hud.ClientPacketListenerMixin",
+        "hud.EntityRendererMixin",
+        "hud.GuiGraphicsExtractorMixin",
+        "hud.LivingEntityRendererMixin",
+        "hud.NameTagFeatureRendererMixin",
+        "hud.ScreenMixin",
+        "retexture.AbstractButtonMixin",
+        "retexture.AbstractScrollAreaMixin",
+        "retexture.AbstractSliderButtonMixin",
+        "retexture.EditBoxMixin"
+    ],
+    "mixins": [
+        "patch.EntityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
