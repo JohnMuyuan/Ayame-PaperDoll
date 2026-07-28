@@ -1,8 +1,8 @@
-# Ayame PaperDoll 26.1 Edition
+# Ayame PaperDoll:JohnMuyuan Edition
 
 一个高度可配置的 Minecraft 纸娃娃（PaperDoll）HUD 模组，面向 **Minecraft 26.1**，支持 **Fabric** 与 **NeoForge** 双加载器。在屏幕角落实时渲染你的玩家模型，并提供极其丰富的自定义选项与可视化编辑器。
 
-本模组是 **Ayame PaperDoll**（作者 HappyRespawnanchor）的 26.1 独立演进版，技术渊源可追溯至 **Extra Player Renderer**（原作者 LucunJi）。代码在 LGPL-3.0-or-later 下授权，详见[许可证](#许可证)。
+**Ayame PaperDoll:JohnMuyuan Edition** 是 **Ayame PaperDoll**（作者 HappyRespawnanchor）的 Minecraft 26.1 魔改版，技术渊源可追溯至 **Extra Player Renderer**（原作者 LucunJi）。代码在 LGPL-3.0-or-later 下授权，详见[许可证](#许可证)。
 
 > [!NOTE]
 > 本模组与上游 Ayame PaperDoll 使用相同的内部 Mod ID（`ayame_paperdoll`），二者**不可同时安装**；配置文件互相兼容，可直接替换使用。
@@ -54,16 +54,13 @@
 
 ## 截图
 
-![默认位置与样式](https://cdn.modrinth.com/data/cached_images/6e7af18771d006eda3077d33800250bc80cdd647.png)
+![游戏截图 1](.github/screenshots/1.png)
 
-<details>
-<summary>更多截图（配置界面 / 可视化编辑器）</summary>
+![游戏截图 2](.github/screenshots/2.png)
 
-![配置界面](https://cdn.modrinth.com/data/cached_images/44e1b59e5019df8f03c34fa5d677841eacc26896.png)
-![配置界面](https://cdn.modrinth.com/data/cached_images/c3e90083ab02fc63bda0da3bab7b851f8308382e.png)
-![可视化配置编辑器](https://cdn.modrinth.com/data/cached_images/0bda8a26fc0822669f736d4caa0fee140354bdb2.png)
+![游戏截图 3](.github/screenshots/3.png)
 
-</details>
+![游戏截图 4](.github/screenshots/4.png)
 
 ## 安装
 
