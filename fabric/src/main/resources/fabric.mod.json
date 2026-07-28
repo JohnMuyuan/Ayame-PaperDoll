@@ -5,9 +5,9 @@
   "name": "${mod_name}",
   "description": "${mod_description}",
   "authors": [
-    "Lucun_Ji (original author of Extra Player Renderer)",
+    "JohnMuyuan",
     "HappyRespawnanchor (upstream Ayame PaperDoll)",
-    "JohnMuyuan (this fork)"
+    "Lucun_Ji (original author of Extra Player Renderer)"
   ],
   "contributors": [
     "Fallen_Breath",

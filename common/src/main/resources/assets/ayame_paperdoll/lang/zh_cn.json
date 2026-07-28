@@ -1,6 +1,6 @@
 {
-  "modmenu.descriptionTranslation.ayame_paperdoll": "高度可配置的纸娃娃模组。Ayame PaperDoll（HappyRespawnanchor 作品）的非官方分支，上游本身基于 Extra Player Renderer。",
-  "fml.menu.mods.info.description.ayame_paperdoll": "高度可配置的纸娃娃模组。Ayame PaperDoll（HappyRespawnanchor 作品）的非官方分支，上游本身基于 Extra Player Renderer。",
+  "modmenu.descriptionTranslation.ayame_paperdoll": "高度可配置的纸娃娃模组（MC 26.1），独立维护。技术起点为 Ayame PaperDoll（HappyRespawnanchor 作品），其本身基于 Extra Player Renderer。",
+  "fml.menu.mods.info.description.ayame_paperdoll": "高度可配置的纸娃娃模组（MC 26.1），独立维护。技术起点为 Ayame PaperDoll（HappyRespawnanchor 作品），其本身基于 Extra Player Renderer。",
   "config.ayame_paperdoll.on": "开",
   "config.ayame_paperdoll.off": "关",
   "config.ayame_paperdoll.reset": "重置",

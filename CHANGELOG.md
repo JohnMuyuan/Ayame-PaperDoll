@@ -1,17 +1,40 @@
-# Changelog
+# 更新日志
 
-All notable changes to this fork are documented here. Upstream history lives at
-[AyameMC/Ayame-PaperDoll](https://github.com/AyameMC/Ayame-PaperDoll).
+本模组从 `1.0.0` 起独立编号。技术起点为 [AyameMC/Ayame-PaperDoll](https://github.com/AyameMC/Ayame-PaperDoll)
+的 `26.1` 分支（上游版本 4.4.3），以下差异均基于与该分支的代码对比。
 
-## [4.4.3.1+muyuan.1+26.1] - 2026-07-28
+## [1.0.0+26.1] - 2026-07-28
 
-### Fork initialization
+首个独立发布版。模组显示名定为 **Ayame PaperDoll 26.1 Edition**，版本号独立演进，不沿用上游编号。
 
-- Forked from upstream `AyameMC/Ayame-PaperDoll` version `4.4.3.1` (Minecraft 26.1).
-- Renamed mod list display to `Ayame PaperDoll (Muyuan Fork)` to distinguish from upstream.
-- Re-pointed homepage / sources / issues metadata to this repository.
-- Removed upstream Modrinth update-check URL (`updateJSONURL`) from NeoForge metadata so
-  the fork no longer advertises official upstream updates.
-- Removed upstream Modrinth / CurseForge links from Mod Menu metadata.
-- Added JohnMuyuan to authors; upstream authors credited explicitly.
-- Kept internal mod id `ayame_paperdoll` for config/save compatibility with upstream.
+### 新增功能
+
+- **显示优先级**（`display_priority`）：三档可调——默认（原 HUD 层）/ 高（绘制在聊天、字幕等 HUD 之上）/ 最高（绘制在绝大多数游戏界面之上，ESC 暂停菜单除外）。
+- **新旋转模式**：完全同步玩家动作（FULL_SYNC，头/身/俯仰完全跟随真实玩家，忽略旋转范围限制）与半同步（HALF_SYNC，同步动作但躯干偏转超过约 45° 时自动回正）。
+- **锁定模式独立旋转**（`lock_rotation_x/y/z`）：Lock 模式使用独立的旋转参数，可视化编辑器中右键拖动即可调整。
+- **名牌显示**（`display_name_tag` 等 5 项）：纸娃娃可显示玩家名与计分板标签，支持独立镜像（模型镜像时保持文字可读）、大小缩放（0 隐藏）、XY 偏移微调。
+- **实体效果渲染**（`render_entity_effects`）：可选渲染着火、隐身、受伤红覆盖等实体绑定效果；着火时纸娃娃随燃烧变亮。
+- **效果粒子**（`render_effect_particles`、`effect_particle_density`）：纸娃娃上自绘药水旋涡粒子与不死图腾爆发粒子，密度可调。
+- **最大刷新率限制**（`max_refresh_rate`，0–240，默认 60）：限制间隔内复用上一帧离屏纹理，显著降低性能开销。
+- **配置兼容迁移**：自动将旧版配置中的历史布尔键迁移到新的旋转模式枚举。
+
+### 修改
+
+- **渲染管线重构**：离屏纹理按纸娃娃实际包围盒动态分配（鞘翅飞行、名牌显示时自动扩展），不再占用全屏，只绘制有效区域。
+- **镜像渲染**：镜像状态按渲染状态传递；镜像 + 名牌可读时拆分两次渲染，保证文字不反。
+- **着火/发光处理**：不再通过清除火焰 tick 隐藏火焰（改由实体效果开关控制）；轮廓发光始终禁用（画中画下会产生白色剪影）；隐身实体转为半透明可见。
+- **观察者模式**：玩家名为空时直接使用本地玩家，跳过玩家列表查询。
+- **可视化编辑器交互**：Shift+左键拖动调整名牌偏移；右键拖动同时调 X/Y 旋转；新增 Ctrl+右键调 Z 轴旋转。
+- **配置容错**：遇到未知配置类别/选项/枚举值时跳过并保留默认值，不再抛异常。
+- **中文翻译**：简中/繁中语言文件全面润色。
+
+### 删除
+
+- **坐骑渲染**（`render_vehicle`）及坐船 180° 旋转修正的整套特判代码（上游该特性本就不完善）。
+- NeoForge 元数据中指向官方 Modrinth 的自动更新检查地址。
+
+### 元数据
+
+- 模组显示名 `Ayame PaperDoll 26.1 Edition`；内部 Mod ID 保持 `ayame_paperdoll`（与上游配置文件兼容，但二者不可同时安装）。
+- 主页 / 源码 / 问题反馈地址指向本仓库。
+- 作者列表：JohnMuyuan（维护与开发）、HappyRespawnanchor（上游 Ayame PaperDoll）、LucunJi（Extra Player Renderer 原作者）。

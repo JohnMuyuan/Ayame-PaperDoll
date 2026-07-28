@@ -9,9 +9,9 @@ version = "${mod_version}"
 displayName = "${mod_name}"
 displayURL = "${mod_homepage_url}"
 authors = '''
-LucunJi (original author of Extra Player Renderer)
+JohnMuyuan
 HappyRespawnanchor (upstream Ayame PaperDoll)
-JohnMuyuan (this fork)
+LucunJi (original author of Extra Player Renderer)
 '''
 credits = '''
 Fallen_Breath
