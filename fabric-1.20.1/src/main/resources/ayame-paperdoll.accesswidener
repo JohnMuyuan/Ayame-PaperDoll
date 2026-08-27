@@ -1,0 +1,10 @@
+accessWidener v2 named
+accessible field net/minecraft/world/entity/LivingEntity swimAmount F
+accessible field net/minecraft/world/entity/LivingEntity swimAmountO F
+accessible field net/minecraft/world/entity/Entity vehicle Lnet/minecraft/world/entity/Entity;
+accessible field net/minecraft/world/entity/LivingEntity fallFlyTicks I
+accessible field net/minecraft/client/player/LocalPlayer crouching Z
+accessible method net/minecraft/world/entity/Entity setSharedFlag (IZ)V
+accessible method net/minecraft/world/entity/Entity getSharedFlag (I)Z
+accessible method net/minecraft/client/renderer/entity/EntityRenderer renderNameTag (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V
+accessible field net/minecraft/client/particle/ParticleEngine textureAtlas Lnet/minecraft/client/renderer/texture/TextureAtlas;

@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "org.ayamemc.ayamepaperdoll.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+    "hud.ClientPacketListenerMixin",
+    "hud.EntityRendererMixin",
+    "hud.ScreenMixin"
+  ],
+  "mixins": [
+    "patch.EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

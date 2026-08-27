@@ -1,0 +1,194 @@
+/*
+ *     Highly configurable PaperDoll mod. Forked from Extra Player Renderer.
+ *     Copyright (C) 2024-2025  LucunJi(Original author), HappyRespawnanchor
+ *
+ *     This file is part of Ayame PaperDoll.
+ *
+ *     Ayame PaperDoll is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Ayame PaperDoll is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Lesser General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Lesser General Public License
+ *     along with Ayame PaperDoll.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.ayamemc.ayamepaperdoll.config.persistence;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import net.minecraft.resources.ResourceLocation;
+import org.ayamemc.ayamepaperdoll.AyamePaperDoll;
+import org.ayamemc.ayamepaperdoll.config.Configs;
+import org.ayamemc.ayamepaperdoll.config.model.ConfigOption;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GsonConfigPersistence implements ConfigPersistence {
+    private final Path path;
+    private final Gson gson;
+
+    public GsonConfigPersistence(Path path) {
+        this.path = path;
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
+    }
+
+    @Override
+    public Path getPath() {
+        return this.path;
+    }
+
+    @Override
+    public boolean save(List<? extends ConfigOption<?>> options) {
+        var categories = categorize(options);
+
+        try (var writer = this.gson.newJsonWriter(new BufferedWriter(new FileWriter(this.path.toFile())))) {
+            writer.beginObject();
+            // for each category
+            for (var entry : categories.entrySet()) {
+                writer.name(entry.getKey().toString());
+                writer.beginObject();
+
+                // for each option in the category
+                for (var optionEntry : entry.getValue().entrySet()) {
+                    var id = optionEntry.getKey();
+                    var option = optionEntry.getValue();
+                    writer.name(id.toString());
+                    this.gson.toJson(option.getValue(), option.getType(), writer);
+                }
+
+                writer.endObject();
+            }
+            writer.endObject();
+        } catch (Exception e) {
+            //noinspection StringConcatenationArgumentToLogCall
+            AyamePaperDoll.LOGGER.error("Failed to save config at " + this.path, e);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean load(List<? extends ConfigOption<?>> options) {
+        var categories = categorize(options);
+
+        if (!this.path.toFile().exists() || !this.path.toFile().isFile()) {
+            AyamePaperDoll.LOGGER.info("Configuration is not found at {}", this.path);
+            return false;
+        }
+
+        try (var reader = gson.newJsonReader(new BufferedReader(new FileReader(this.path.toFile())))) {
+            reader.beginObject();
+
+            // for each category
+            while (reader.peek() == JsonToken.NAME) {
+                var categoryName = reader.nextName();
+                var category = categories.get(new ResourceLocation(categoryName));
+                if (category == null) {
+                    reader.skipValue();
+                    continue;
+                }
+
+                reader.beginObject();
+
+                // for each option in the category
+                while (reader.peek() == JsonToken.NAME) {
+                    var optionName = reader.nextName();
+                    var option = category.get(new ResourceLocation(optionName));
+                    if (option == null) {
+                        if (!this.loadLegacyOption(optionName, reader, categories)) {
+                            reader.skipValue();
+                        }
+                        continue;
+                    }
+
+                    if (option.getType().isAssignableFrom(Integer.class))
+                        //noinspection unchecked
+                        ((ConfigOption<Integer>) option).setValue(reader.nextInt());
+                    else if (option.getType().isAssignableFrom(Double.class))
+                        //noinspection unchecked
+                        ((ConfigOption<Double>) option).setValue(reader.nextDouble());
+                    else if (option.getType().isAssignableFrom(Boolean.class))
+                        //noinspection unchecked
+                        ((ConfigOption<Boolean>) option).setValue(reader.nextBoolean());
+                    else if (option.getType().isAssignableFrom(String.class))
+                        //noinspection unchecked
+                        ((ConfigOption<String>) option).setValue(reader.nextString());
+                    else if (option.getType().isAssignableFrom(Long.class))
+                        //noinspection unchecked
+                        ((ConfigOption<Long>) option).setValue(reader.nextLong());
+                    else if (option.getType().isEnum()) {
+                        //noinspection unchecked,rawtypes
+                        var enumValue = reader.nextString();
+                        try {
+                            ((ConfigOption<Enum<?>>) option).setValue(Enum.valueOf(((Class) option.getType()), enumValue));
+                        } catch (IllegalArgumentException e) {
+                            AyamePaperDoll.LOGGER.warn("Skipping unknown enum value {} for option {}", enumValue, optionName);
+                        }
+                    }
+                    else
+                        throw new IllegalStateException("The option of type " + option.getType() + " could not be deserialized from a JSON value");
+                }
+
+                reader.endObject();
+            }
+
+            reader.endObject();
+        } catch (Exception e) {
+            //noinspection StringConcatenationArgumentToLogCall
+            AyamePaperDoll.LOGGER.error("Failed to load config at " + this.path, e);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean loadLegacyOption(String optionName, JsonReader reader, Map<ResourceLocation, Map<ResourceLocation, ConfigOption<?>>> categories) throws IOException {
+        var optionPath = new ResourceLocation(optionName).getPath();
+        if (!isLegacyFullSyncOption(optionPath) || reader.peek() != JsonToken.BOOLEAN) {
+            return false;
+        }
+        if (reader.nextBoolean()) {
+            var general = categories.get(AyamePaperDoll.path("general"));
+            if (general != null) {
+                var rotationMode = general.get(AyamePaperDoll.path("rotation_mode"));
+                if (rotationMode != null && rotationMode.getType().isAssignableFrom(Configs.RotationMode.class)) {
+                    //noinspection unchecked
+                    ((ConfigOption<Configs.RotationMode>) rotationMode).setValue(Configs.RotationMode.FULL_SYNC);
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isLegacyFullSyncOption(String optionPath) {
+        return switch (optionPath) {
+            case "full_sync_motion", "fully_sync_motion", "sync_motion",
+                 "full_sync_player_motion", "fully_sync_player_motion",
+                 "complete_sync_player_motion", "completely_sync_player_motion",
+                 "sync_player_motion", "sync_player_action" -> true;
+            default -> false;
+        };
+    }
+
+    private Map<ResourceLocation, Map<ResourceLocation, ConfigOption<?>>> categorize(List<? extends ConfigOption<?>> options) {
+        var categories = new LinkedHashMap<ResourceLocation, Map<ResourceLocation, ConfigOption<?>>>();
+        for (ConfigOption<?> option : options)
+            categories.computeIfAbsent(option.getCategory(), k -> new LinkedHashMap<>()).put(option.getId(), option);
+        return categories;
+    }
+}
