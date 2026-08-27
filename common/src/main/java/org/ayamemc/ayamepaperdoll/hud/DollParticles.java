@@ -21,7 +21,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public final class DollParticles {
         if (entityId == this.targetEntityId) this.totemTicks = 30;
     }
 
-    public void submit(SubmitNodeCollector collector, PoseStack poseStack, Quaternionf entityRotation) {
+    public void submit(SubmitNodeCollector collector, PoseStack poseStack) {
         if (!CONFIGS.renderEffectParticles.getValue() || this.particles.isEmpty()) return;
         Minecraft minecraft = Minecraft.getInstance();
         TextureAtlasSprite effect = minecraft.getAtlasManager().get(new SpriteId(TextureAtlas.LOCATION_PARTICLES, EFFECT_TEXTURE));
@@ -83,7 +82,7 @@ public final class DollParticles {
         collector.submitCustomGeometry(
                 poseStack,
                 RenderTypes.entityTranslucentEmissive(effect.atlasLocation()),
-                (pose, consumer) -> render(pose, consumer, effect, totem, entityRotation)
+                (pose, consumer) -> render(pose, consumer, effect, totem)
         );
     }
 
@@ -132,8 +131,7 @@ public final class DollParticles {
         }
     }
 
-    private void render(PoseStack.Pose pose, VertexConsumer consumer, TextureAtlasSprite effect, TextureAtlasSprite totem,
-                        Quaternionf rotation) {
+    private void render(PoseStack.Pose pose, VertexConsumer consumer, TextureAtlasSprite effect, TextureAtlasSprite totem) {
         Vector3f point = new Vector3f();
         for (Particle particle : this.particles) {
             TextureAtlasSprite sprite = particle.totem ? totem : effect;
@@ -141,7 +139,7 @@ public final class DollParticles {
             float x = Mth.lerp(particle.partialTick, particle.oldX, particle.x);
             float y = Mth.lerp(particle.partialTick, particle.oldY, particle.y);
             float z = Mth.lerp(particle.partialTick, particle.oldZ, particle.z);
-            point.set(x, y, z).rotate(rotation);
+            point.set(x, y, z);
             float size = particle.totem ? 0.15F : 0.105F;
             quad(pose, consumer, point, size, sprite, particle.red, particle.green, particle.blue, alpha, false);
             quad(pose, consumer, point, size, sprite, particle.red, particle.green, particle.blue, alpha, true);
@@ -152,16 +150,27 @@ public final class DollParticles {
                              TextureAtlasSprite sprite, float red, float green, float blue, float alpha, boolean reverse) {
         int color = ((int) (alpha * 255.0F) << 24) | ((int) (red * 255.0F) << 16)
                 | ((int) (green * 255.0F) << 8) | (int) (blue * 255.0F);
-        float[][] corners = reverse
-                ? new float[][]{{-size, -size}, {-size, size}, {size, size}, {size, -size}}
-                : new float[][]{{-size, -size}, {size, -size}, {size, size}, {-size, size}};
-        float[][] uv = reverse
-                ? new float[][]{{sprite.getU0(), sprite.getV1()}, {sprite.getU0(), sprite.getV0()}, {sprite.getU1(), sprite.getV0()}, {sprite.getU1(), sprite.getV1()}}
-                : new float[][]{{sprite.getU0(), sprite.getV1()}, {sprite.getU1(), sprite.getV1()}, {sprite.getU1(), sprite.getV0()}, {sprite.getU0(), sprite.getV0()}};
-        for (int i = 0; i < 4; i++) {
-            consumer.addVertex(pose, center.x + corners[i][0], center.y + corners[i][1], center.z)
-                    .setColor(color).setUv(uv[i][0], uv[i][1]).setUv1(0, 10).setLight(FULL_LIGHT).setNormal(pose, 0.0F, 0.0F, 1.0F);
+        float u0 = sprite.getU0();
+        float u1 = sprite.getU1();
+        float v0 = sprite.getV0();
+        float v1 = sprite.getV1();
+        if (reverse) {
+            vertex(pose, consumer, center.x - size, center.y - size, center.z, color, u0, v1);
+            vertex(pose, consumer, center.x - size, center.y + size, center.z, color, u0, v0);
+            vertex(pose, consumer, center.x + size, center.y + size, center.z, color, u1, v0);
+            vertex(pose, consumer, center.x + size, center.y - size, center.z, color, u1, v1);
+        } else {
+            vertex(pose, consumer, center.x - size, center.y - size, center.z, color, u0, v1);
+            vertex(pose, consumer, center.x + size, center.y - size, center.z, color, u1, v1);
+            vertex(pose, consumer, center.x + size, center.y + size, center.z, color, u1, v0);
+            vertex(pose, consumer, center.x - size, center.y + size, center.z, color, u0, v0);
         }
+    }
+
+    private static void vertex(PoseStack.Pose pose, VertexConsumer consumer, float x, float y, float z,
+                               int color, float u, float v) {
+        consumer.addVertex(pose, x, y, z)
+                .setColor(color).setUv(u, v).setUv1(0, 10).setLight(FULL_LIGHT).setNormal(pose, 0.0F, 0.0F, 1.0F);
     }
 
     private void addParticle(Particle particle) {

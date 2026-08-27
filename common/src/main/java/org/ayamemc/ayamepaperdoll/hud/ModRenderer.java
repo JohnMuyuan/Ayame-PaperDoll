@@ -96,7 +96,7 @@ public class ModRenderer extends PictureInPictureRenderer<ModRenderState> {
             Vector3f vector3f = renderState.translation();
             poseStack.mulPose(renderState.rotation());
             if (!renderState.nameTagsOnly()) {
-                DollParticles.getInstance().submit(featurerenderdispatcher.getSubmitNodeStorage(), poseStack, new Quaternionf());
+                DollParticles.getInstance().submit(featurerenderdispatcher.getSubmitNodeStorage(), poseStack);
             }
             Component nameTag = renderState.renderState().nameTag;
             Component scoreText = renderState.renderState().scoreText;
