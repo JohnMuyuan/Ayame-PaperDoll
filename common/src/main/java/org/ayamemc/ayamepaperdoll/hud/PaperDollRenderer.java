@@ -75,8 +75,8 @@ public class PaperDollRenderer {
             new DataBackupEntry<>(e -> e.xRotO, (e, pitch) -> e.xRotO = pitch),
             new DataBackupEntry<>(LivingEntity::getXRot, LivingEntity::setXRot),
 
-            new DataBackupEntry<>(e -> e.attackAnim, (e, prog) -> e.attackAnim = prog),
-            new DataBackupEntry<>(e -> e.oAttackAnim, (e, prog) -> e.oAttackAnim = prog),
+            new DataBackupEntry<>(e -> e.swingState.animation, (e, prog) -> e.swingState.animation = prog),
+            new DataBackupEntry<>(e -> e.swingState.oldAnimation, (e, prog) -> e.swingState.oldAnimation = prog),
             new DataBackupEntry<>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
             new DataBackupEntry<>(LivingEntity::getRemainingFireTicks, LivingEntity::setRemainingFireTicks),
             new DataBackupEntry<>(e -> e.getSharedFlag(0), (e, flag) -> e.setSharedFlag(0, flag)) // on fire
@@ -261,8 +261,8 @@ public class PaperDollRenderer {
 
 
         if (!CONFIGS.swingHands.getValue()) {
-            targetEntity.attackAnim = 0;
-            targetEntity.oAttackAnim = 0;
+            targetEntity.swingState.animation = 0;
+            targetEntity.swingState.oldAnimation = 0;
         }
 
         if (!CONFIGS.hurtFlash.getValue()) {

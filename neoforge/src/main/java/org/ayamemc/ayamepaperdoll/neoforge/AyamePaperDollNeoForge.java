@@ -60,10 +60,7 @@ public final class AyamePaperDollNeoForge {
     public static void registerPip(RegisterPictureInPictureRenderersEvent event) {
         event.register(
                 ModRenderState.class,
-                // A factory that takes in the `MultiBufferSource.BufferSource` and returns the PiP renderer
-                (ctx)-> new ModRenderer(
-                        ctx,Minecraft.getInstance().getEntityRenderDispatcher()
-                )
+                () -> new ModRenderer(Minecraft.getInstance().getEntityRenderDispatcher())
         );
     }
 

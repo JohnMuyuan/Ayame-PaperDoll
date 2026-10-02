@@ -52,11 +52,11 @@ public class EventHandler {
         if (player == null) return;
         final Pose playerPose = player.getPose();
         if (
-                !minecraft.options.hideGui &&
+                !minecraft.gui.hud.isHidden() &&
                         !(CONFIGS.hideUnderDebug.getValue() && minecraft.debugEntries.isOverlayVisible()) &&
-                        (minecraft.screen == null || !CONFIGS.hideOnScreenOpen.getValue()) &&
-                        !(minecraft.screen instanceof ConfigScreen) &&
-                        !(minecraft.screen instanceof VisualConfigEditorScreen) &&
+                        (minecraft.gui.screen() == null || !CONFIGS.hideOnScreenOpen.getValue()) &&
+                        !(minecraft.gui.screen() instanceof ConfigScreen) &&
+                        !(minecraft.gui.screen() instanceof VisualConfigEditorScreen) &&
                         (!(CONFIGS.visibleDuringActivity.getValue()) ||
                                 (CONFIGS.visibleDuringActivity.getValue() && hasActivity(player, playerPose)))
 
@@ -68,13 +68,13 @@ public class EventHandler {
 
     public static void renderHighestPriorityPaperDoll(GuiGraphicsExtractor graphics, float partialTick) {
         if (CONFIGS.displayPriority.getValue() != DisplayPriority.HIGHEST) return;
-        if (minecraft.screen instanceof PauseScreen) return;
+        if (minecraft.gui.screen() instanceof PauseScreen) return;
         final Player player = minecraft.player;
-        if (player == null || minecraft.options.hideGui) return;
+        if (player == null || minecraft.gui.hud.isHidden()) return;
         final Pose playerPose = player.getPose();
         if (
-                !(minecraft.screen instanceof ConfigScreen) &&
-                        !(minecraft.screen instanceof VisualConfigEditorScreen) &&
+                !(minecraft.gui.screen() instanceof ConfigScreen) &&
+                        !(minecraft.gui.screen() instanceof VisualConfigEditorScreen) &&
                         (!(CONFIGS.visibleDuringActivity.getValue()) ||
                                 (CONFIGS.visibleDuringActivity.getValue() && hasActivity(player, playerPose)))
         ) {
@@ -119,7 +119,7 @@ public class EventHandler {
             CONFIGS.displayPaperDoll.setValue(!CONFIGS.displayPaperDoll.getValue());
         }
         while (AyamePaperDoll.OPEN_CONFIG_GUI.consumeClick()) {
-            minecraft.setScreen(new ConfigScreen(lastScreen, AyamePaperDoll.CONFIGS.getOptions()));
+            minecraft.gui.setScreen(new ConfigScreen(lastScreen, AyamePaperDoll.CONFIGS.getOptions()));
         }
     }
 }

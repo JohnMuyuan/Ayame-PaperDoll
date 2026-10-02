@@ -60,7 +60,7 @@ public class AyamePaperDollFabric implements ClientModInitializer {
                 (graphics, deltaTracker) -> EventHandler.renderPaperDollForPriority(graphics, deltaTracker, DisplayPriority.HIGHEST)
         );
         PictureInPictureRendererRegistry.register(context -> new ModRenderer(
-                context.bufferSource(), context.minecraft().getEntityRenderDispatcher()
+                context.minecraft().getEntityRenderDispatcher()
         ));
     }
 }

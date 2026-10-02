@@ -3,6 +3,23 @@
 本模组从 `1.0.0` 起独立编号。技术起点为 [AyameMC/Ayame-PaperDoll](https://github.com/AyameMC/Ayame-PaperDoll)
 的 `26.1` 分支（上游版本 4.4.3），以下差异均基于与该分支的代码对比。
 
+## [1.0.0+26.3] - 2026-10-02
+
+Minecraft **26.3** 移植版（Fabric / NeoForge）。功能与 `1.0.0+26.1` 对齐，未新增特性。
+
+### 移植说明
+
+- 画中画渲染器按 26.3 的显式 RenderPass 流程重写（原先依赖的 `BufferSource` 与输出纹理覆盖已被移除）。
+- 自定义管线改用 BindGroupLayout 声明；着色器更新为 26.3 的写法（显式 location、`#include`、新的 `DynamicTransforms` 布局）。
+- 名牌缩放的注入点由 `NameTagFeatureRenderer` 迁移到 `SubmitNodeCollection.submitNameTag`；计分板行距改为对平移参数缩放，Fabric 与 NeoForge 行为一致。
+- 按键与鼠标常量由 GLFW 改为 `InputConstants`（26.3 改用 SDL）；界面切换改走 `Minecraft.gui`。
+- 配置界面的标签栏改用 `MenuTabBar`。
+
+### 依赖
+
+- Fabric：Fabric Loader ≥ 0.19.5，Fabric API ≥ 0.161.0+26.3，Mod Menu 21.x 可选。
+- NeoForge：≥ 26.3.0.41-beta。
+
 ## [1.0.0+1.20.1] - 2026-08-27
 
 Minecraft **1.20.1**（Fabric）移植版，源码位于 `fabric-1.20.1/` 子项目，独立构建。功能与 `1.0.0+26.1` 对齐，未新增特性。

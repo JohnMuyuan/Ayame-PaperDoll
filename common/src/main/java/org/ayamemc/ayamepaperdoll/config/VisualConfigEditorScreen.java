@@ -27,7 +27,7 @@ import net.minecraft.network.chat.Component;
 import org.ayamemc.ayamepaperdoll.config.Configs.RotationMode;
 import org.ayamemc.ayamepaperdoll.config.model.SimpleNumericOption;
 import org.ayamemc.ayamepaperdoll.hud.PaperDollRenderer;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import static org.ayamemc.ayamepaperdoll.AyamePaperDoll.CONFIGS;
 
@@ -68,16 +68,16 @@ public class VisualConfigEditorScreen extends Screen {
 
         if (lastScreen instanceof ConfigScreen configScreen) {
             configScreen.onClose();
-            this.minecraft.setScreen(new ConfigScreen(lastScreen, CONFIGS.getOptions()));
+            this.minecraft.gui.setScreen(new ConfigScreen(lastScreen, CONFIGS.getOptions()));
         } else {
-            this.minecraft.setScreen(lastScreen);
+            this.minecraft.gui.setScreen(lastScreen);
         }
     }
 
     @Override
     public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double deltaX, double deltaY) {
         boolean onDrag = false;
-        if (mouseButtonEvent.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+        if (mouseButtonEvent.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             if (hasShiftDown()) {
                 final double divisor = Math.max(CONFIGS.size.getValue() * Math.max(CONFIGS.nameTagSize.getValue(), 0.1) * 0.025, 0.001);
                 CONFIGS.nameTagOffsetX.setValue(CONFIGS.nameTagOffsetX.getValue() + deltaX / divisor);
@@ -94,7 +94,7 @@ public class VisualConfigEditorScreen extends Screen {
             }
             onDrag = true;
         }
-        if (mouseButtonEvent.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+        if (mouseButtonEvent.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
             SimpleNumericOption<Double> rotationX = getActiveRotationX();
             SimpleNumericOption<Double> rotationY = getActiveRotationY();
             SimpleNumericOption<Double> rotationZ = getActiveRotationZ();
@@ -111,14 +111,14 @@ public class VisualConfigEditorScreen extends Screen {
 
     private boolean hasShiftDown() {
         long window = this.minecraft.getWindow().handle();
-        return GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) ||
+                InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     private boolean isControlPressed() {
         long window = this.minecraft.getWindow().handle();
-        return GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS ||
-                GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_CONTROL) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) ||
+                InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     private SimpleNumericOption<Double> getActiveRotationX() {

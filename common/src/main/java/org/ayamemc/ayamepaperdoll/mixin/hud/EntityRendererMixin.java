@@ -23,16 +23,18 @@ package org.ayamemc.ayamepaperdoll.mixin.hud;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import org.ayamemc.ayamepaperdoll.hud.NameTagScaleState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin {
-    @ModifyConstant(
+    // The spacing is 9 * 1.15 * 0.025; NeoForge folds it into one constant, so scale the argument instead.
+    @ModifyArg(
             method = "submitNameDisplay(Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;I)V",
-            constant = @Constant(floatValue = 0.025F)
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"),
+            index = 1
     )
-    private float modifyScoreNameSpacing(float vanillaScale) {
-        return NameTagScaleState.adjust(vanillaScale);
+    private float modifyScoreNameSpacing(float vanillaSpacing) {
+        return NameTagScaleState.adjust(vanillaSpacing);
     }
 }

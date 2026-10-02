@@ -1,8 +1,8 @@
 # Ayame PaperDoll:JohnMuyuan Edition
 
-一个高度可配置的 Minecraft 纸娃娃（PaperDoll）HUD 模组，面向 **Minecraft 26.1**，支持 **Fabric** 与 **NeoForge** 双加载器。在屏幕角落实时渲染你的玩家模型，并提供极其丰富的自定义选项与可视化编辑器。
+一个高度可配置的 Minecraft 纸娃娃（PaperDoll）HUD 模组，面向 **Minecraft 26.3**，支持 **Fabric** 与 **NeoForge** 双加载器。在屏幕角落实时渲染你的玩家模型，并提供极其丰富的自定义选项与可视化编辑器。
 
-**Ayame PaperDoll:JohnMuyuan Edition** 是 **Ayame PaperDoll**（作者 HappyRespawnanchor）的 Minecraft 26.1 魔改版，技术渊源可追溯至 **Extra Player Renderer**（原作者 LucunJi）。代码在 LGPL-3.0-or-later 下授权，详见[许可证](#许可证)。
+**Ayame PaperDoll:JohnMuyuan Edition** 是 **Ayame PaperDoll**（作者 HappyRespawnanchor）的 Minecraft 26.3 魔改版，技术渊源可追溯至 **Extra Player Renderer**（原作者 LucunJi）。代码在 LGPL-3.0-or-later 下授权，详见[许可证](#许可证)。
 
 > [!NOTE]
 > 本模组与上游 Ayame PaperDoll 使用相同的内部 Mod ID（`ayame_paperdoll`），二者**不可同时安装**；配置文件互相兼容，可直接替换使用。
@@ -66,9 +66,9 @@
 
 从 [**Releases**](https://github.com/JohnMuyuan/Ayame-PaperDoll/releases/latest) 下载对应加载器的 jar，放入 `mods` 文件夹：
 
-- **Minecraft**：26.1
-- **Fabric**：Fabric Loader ≥ 0.18.5 + Fabric API ≥ 0.144.3+26.1（可选装 Mod Menu 以便打开配置界面）
-- **NeoForge**：≥ 26.1.0.7-beta
+- **Minecraft**：26.3
+- **Fabric**：Fabric Loader ≥ 0.19.5 + Fabric API ≥ 0.161.0+26.3（可选装 Mod Menu 以便打开配置界面）
+- **NeoForge**：≥ 26.3.0.41-beta
 
 ## 自行构建
 
@@ -82,7 +82,7 @@
 
 ## 版本号规则
 
-格式为 `x.y.z+26.1`，从 `1.0.0` 起步独立编号，不沿用上游版本号。变更记录见 [CHANGELOG.md](CHANGELOG.md)。
+格式为 `x.y.z+26.3`，从 `1.0.0` 起步独立编号，不沿用上游版本号。变更记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 致谢
 

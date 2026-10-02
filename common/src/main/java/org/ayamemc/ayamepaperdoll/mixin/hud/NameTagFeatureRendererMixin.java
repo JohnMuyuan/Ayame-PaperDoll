@@ -20,7 +20,7 @@
 
 package org.ayamemc.ayamepaperdoll.mixin.hud;
 
-import net.minecraft.client.renderer.feature.NameTagFeatureRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollection;
 import org.ayamemc.ayamepaperdoll.hud.NameTagScaleState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,10 +28,10 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Mixin(NameTagFeatureRenderer.Storage.class)
+@Mixin(SubmitNodeCollection.class)
 public class NameTagFeatureRendererMixin {
     @ModifyConstant(
-            method = "add",
+            method = "submitNameTag",
             constant = @Constant(floatValue = 0.025F)
     )
     private float modifyPositiveNameTagScale(float vanillaScale) {
@@ -39,7 +39,7 @@ public class NameTagFeatureRendererMixin {
     }
 
     @ModifyConstant(
-            method = "add",
+            method = "submitNameTag",
             constant = @Constant(floatValue = -0.025F)
     )
     private float modifyNegativeNameTagScale(float vanillaScale) {
@@ -47,10 +47,10 @@ public class NameTagFeatureRendererMixin {
     }
 
     @ModifyArg(
-            method = "add",
+            method = "submitNameTag",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/SubmitNodeStorage$NameTagSubmit;<init>(Lorg/joml/Matrix4fc;FFLnet/minecraft/network/chat/Component;IIID)V"
+                    target = "Lnet/minecraft/client/renderer/SubmitNodeCollection;nameTag(Lorg/joml/Matrix4f;FFLnet/minecraft/util/FormattedCharSequence;IIILnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Submit;"
             ),
             index = 1
     )
@@ -59,10 +59,10 @@ public class NameTagFeatureRendererMixin {
     }
 
     @ModifyArg(
-            method = "add",
+            method = "submitNameTag",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/SubmitNodeStorage$NameTagSubmit;<init>(Lorg/joml/Matrix4fc;FFLnet/minecraft/network/chat/Component;IIID)V"
+                    target = "Lnet/minecraft/client/renderer/SubmitNodeCollection;nameTag(Lorg/joml/Matrix4f;FFLnet/minecraft/util/FormattedCharSequence;IIILnet/minecraft/client/gui/Font$DisplayMode;)Lnet/minecraft/client/renderer/feature/TextFeatureRenderer$Submit;"
             ),
             index = 2
     )
